@@ -1,4 +1,5 @@
-
+    /* VANILLA JS CONNECT 4 */
+   
     let playerRed = 'Red', redscore=0;
     let playerYel ='Yellow', yelscore=0;
 
@@ -12,22 +13,36 @@
 
     //Getting the elements
     const resetBtn= document.getElementById('reset'); //button to restart
-    const score = document.querySelector('span'); //score (span)
+    const score = document.querySelector('#span'); //score (span)
     const redname= document.getElementById('red');
     const yelname= document.getElementById('yel');
-    const buttonNames=document.getElementById('updateNames');
-    const playerTurn=document.querySelector('h1');
-    buttonNames.addEventListener('click',setNames)
-
-
-    resetBtn.addEventListener('click', resetGame) //resetgame
+    const buttonNames=document.getElementById('updateNames'); //set new names btn
+    const playerTurn=document.querySelector('#h1');
+    const audio=document.getElementById('audioClick')
     let gameDiv = document.getElementById('board'); //board
+    const optionsButton = document.getElementById('optionsButton'); //Options btn
+    const optionsMenu = document.getElementById('optionsMenu'); //Options menu
+
+    optionsButton.addEventListener('click', displayMenu); //open and close
+    buttonNames.addEventListener('click',setNames)
+    resetBtn.addEventListener('click', resetGame) //resetgame
+
+    /* Functions */
+    function displayMenu(){ //open or close menu
+        optionsMenu.style.display = optionsMenu.style.display === 'block' ? 'none' : 'block';
+    }
 
     function setNames(){ //change the names of the players in the scores
-        playerRed=redname.value;
-        playerYel=yelname.value;
+        if (redname.value==yelname.value) { //in case the names are the same
+            alert('The names are the same')
+            return;
+        }
+        playerRed=(redname.value).charAt(0).toUpperCase()+(redname.value).slice(1); //turns the input into capital
+        playerYel=(yelname.value).charAt(0).toUpperCase()+(yelname.value).slice(1);
         if (runing) currPlayer=playerRed
+        playerTurn.textContent=`${currPlayer.charAt(0).toUpperCase()+currPlayer.slice(1)}`;
         score.textContent = `${playerRed}: ${redscore} - ${playerYel}: ${yelscore}`;
+        displayMenu();
     }
 
     function resetGame() {
@@ -36,7 +51,6 @@
 
         // Reset variables
         
-        currPlayer = playerRed;
         board = [];
         runing = true;
         currColumn = [5, 5, 5, 5, 5, 5, 5];
@@ -45,7 +59,6 @@
         // Restart the game
         gameStart();
     }
-
 
     function gameStart(){ //fill the gamediv with the wholes
         board=[];
@@ -63,16 +76,17 @@
             board.push(row);
         }
     }
-    function addPiece(){
-        if(!runing){ // the function doesnt do anything if its not runing
-            return;
-        }
-        let coord = this.id.split('-');
-        let r= parseInt(coord[0]);
-        let c= parseInt(coord[1]);
-        r= currColumn[c];
-        if (r<0) return;
 
+    function addPiece(){
+        if(!runing) return // the function doesnt do anything if its not runing
+
+        let coord = this.id.split('-');
+        // let r= parseInt(coord[0]);
+        let c= parseInt(coord[1]);
+        r= currColumn[c]; //the row is gona be the current number of the currColumn arr
+
+        if (r<0) return;
+        audio.play();
         if (board[r][c]=== ' ' ){
         board[r][c] = currPlayer;
         currColumn[c]--;
@@ -80,13 +94,18 @@
         if (currPlayer == playerRed ){
             tile.classList.add('red-piece');
             currPlayer=playerYel;
+            playerTurn.style.color = 'yellow'
         } else if (currPlayer== playerYel){
             tile.classList.add('yellow-piece');
             currPlayer=playerRed;
+            playerTurn.style.color = 'red'
+            
         }
         }
-        playerTurn.textContent=`${currPlayer.charAt(0).toUpperCase()+currPlayer.slice(1)} turn`
         checkWiner();
+        playerTurn.textContent=`${currPlayer.charAt(0).toUpperCase()+currPlayer.slice(1)}`;
+        
+        
     }
 
     function checkWiner(){

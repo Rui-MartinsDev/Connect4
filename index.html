@@ -7,15 +7,25 @@
     <link href="style.css" rel="stylesheet">
 </head>
 <body>  
-    <h1>Red turn</h1>
-    <div id="names">
+    <audio src="sounds/click.wav" id="audioClick"></audio> <!-- AUDIO -->
+    
+    <h1 >Player turn: 
+        <span id="h1" style="color: red;">Red</span>                 <!-- players turn -->
+    </h1>
+    
+    <span id="span">Red: 0 - Yellow: 0</span>   <!-- score -->
+    <div id="board"></div>                      <!-- the board -->
+   <button id="reset">Play Again</button>       <!-- reset btn -->
+
+   <button id="optionsButton">Options</button>  <!-- options btn -->
+   <div id="optionsMenu">                       <!-- options menu -->
+        <div id="names">
             <input id="red" type="text" placeholder="Red Name">
             <input id="yel" type="text" placeholder="Yellow Name">
             <button id="updateNames">Set new names</button>
-    </div>
-    <span>Red: 0 - Yellow: 0</span>
-    <div id="board"></div>
-   <button id="reset">Play Again</button> 
+        </div>
+   </div>
+
     <script src="index.js"></script>
 </body>
 </html>
