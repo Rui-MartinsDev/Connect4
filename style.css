@@ -85,7 +85,14 @@ h1{ /* player turn */
     padding: 20px;
     z-index: 2;
     border: 4px solid;
-
+}
+#cross{
+    position: absolute;
+    right: 10px;
+    top: 4px;
+    width: 5px;
+    height: 5px;
+    cursor: pointer;
 }
 
 #optionsMenu a {

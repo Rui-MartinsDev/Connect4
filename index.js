@@ -22,10 +22,17 @@
     let gameDiv = document.getElementById('board'); //board
     const optionsButton = document.getElementById('optionsButton'); //Options btn
     const optionsMenu = document.getElementById('optionsMenu'); //Options menu
+    const cross =document.getElementById('cross');  //cross mark
+    const input=document.querySelectorAll('.inputField') //inputfields for the names
 
+    //EVENT LISTENERS
     optionsButton.addEventListener('click', displayMenu); //open and close
     buttonNames.addEventListener('click',setNames)
     resetBtn.addEventListener('click', resetGame) //resetgame
+    cross.addEventListener('click',displayMenu);    
+    input.forEach((element)=>{element.addEventListener('keydown', (e)=>{ //pressing enter will also setnames
+        if (e.key==='Enter') setNames();
+    })});
 
     /* Functions */
     function displayMenu(){ //open or close menu
@@ -33,12 +40,22 @@
     }
 
     function setNames(){ //change the names of the players in the scores
-        if (redname.value==yelname.value) { //in case the names are the same
+        if (redname.value=='' && yelname.value==''){ // in case no names are assigned
+            alert('No names assigned!')
+            return
+        }
+        else if (redname.value==yelname.value) { //in case the names are the same
             alert('The names are the same')
             return;
+        } else if (redname.value ==''){
+            alert('Red has no name!')
+            return
+        }else if (yelname.value ==''){
+            alert('Yellow has no name!')
+            return
         }
-        playerRed=(redname.value).charAt(0).toUpperCase()+(redname.value).slice(1); //turns the input into capital
-        playerYel=(yelname.value).charAt(0).toUpperCase()+(yelname.value).slice(1);
+        playerRed=((redname.value).charAt(0).toUpperCase()+(redname.value).slice(1)).replace(/ne/g, 'nê'); //turns the input into capital
+        playerYel=((yelname.value).charAt(0).toUpperCase()+(yelname.value).slice(1)).replace(/ne/g, 'nê');
         if (runing) currPlayer=playerRed
         playerTurn.textContent=`${currPlayer.charAt(0).toUpperCase()+currPlayer.slice(1)}`;
         score.textContent = `${playerRed}: ${redscore} - ${playerYel}: ${yelscore}`;
