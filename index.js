@@ -13,7 +13,7 @@
 
     //Getting the elements
     const resetBtn= document.getElementById('reset'); //button to restart
-    const score = document.querySelector('#span'); //score (span)
+    const score = document.querySelector('#score'); //score 
     const redname= document.getElementById('red');
     const yelname= document.getElementById('yel');
     const buttonNames=document.getElementById('updateNames'); //set new names btn

@@ -4,22 +4,21 @@ body{
     background-size: cover;
 }
 /*LEFT SIDE*/
-#span{ /* score */
+#score{ /* score */
     font-size: 30px;
     position: absolute;
     top: 50%;
     left: 30px;
-    background: #cbcbcb;
     border-radius: 10px;
-
+    color: white;
 }
 
 h1{ /* player turn */
     position: absolute;
     top:150px;
     left: 30px;
-    background-color: #cbcbcb;
     border-radius: 10px;
+    color: white;
 }
 
 /*------------------- */
