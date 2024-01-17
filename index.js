@@ -12,7 +12,7 @@
     window.onload = ()=> {gameStart()};
 
     //Getting the elements
-    const resetBtn= document.getElementById('reset'); //button to restart
+    const resetBtn= document.getElementById('reset'); //play again btn
     const score = document.querySelector('#score'); //score 
     const redname= document.getElementById('red');
     const yelname= document.getElementById('yel');
@@ -33,6 +33,9 @@
     input.forEach((element)=>{element.addEventListener('keydown', (e)=>{ //pressing enter will also setnames
         if (e.key==='Enter') setNames();
     })});
+    window.addEventListener('keydown', (e)=>{
+        if (e.key===' ') resetGame();
+    })
 
     /* Functions */
     function displayMenu(){ //open or close menu
