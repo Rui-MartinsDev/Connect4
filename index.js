@@ -122,13 +122,13 @@
             
         }
         }
-        checkWiner();
+        checkWin();
         playerTurn.textContent=`${currPlayer.charAt(0).toUpperCase()+currPlayer.slice(1)}`;
         
         
     }
 
-    function checkWiner(){
+    function checkWiner(){ //CHANGED THE FUNCTIONALY TO THE checkWin() one, (less code easier to read,faster)
         for (let c=0;c<columns-3;c++){ //check horizontally
             for (let r=0; r<rows;r++){
                 if (board[r][c] !== ' '){
@@ -165,7 +165,7 @@
                 }
             }
         }
-        for (let r=0; r<rows-3;r++){ // anti-diagonal
+        for (let r=0; r<rows-3;r++){ // anti-diagonal \
             for (let c=0;c<columns-3;c++){
                 if (board[r][c]!==' '){
                     if (board[r][c]===board[r+1][c+1] &&
@@ -183,7 +183,7 @@
                 }
             }
         }
-        for (let r=0; r<rows;r++){ //diagonal
+        for (let r=3; r<rows;r++){ //diagonal /
             for (let c=0;c<columns-3;c++){
                 if (board[r][c]!==' '){
                     if (board[r][c]===board[r-1][c+1] &&
@@ -202,4 +202,68 @@
             }
         }
     }
-
+    function checkWin(){
+        for (let r=0;r<rows;r++){
+            for (let c=0;c<columns;c++){
+                if (board[r][c]!==' '){
+                    if (c<columns-3){ //check horizontaly, (dont need to check last 3 columns)
+                    
+                            if (board[r][c] ===board[r][c+1] && 
+                                board[r][c+1]===board[r][c+2] &&
+                                board[r][c+2] ===board[r][c+3]){
+                                    (board[r][c]===playerRed)? redscore++: yelscore++;
+                                    //update the score
+                                    score.textContent=`${playerRed}: ${redscore} - ${playerYel}: ${yelscore}`
+                                    setTimeout(() => {
+                                        alert(`${board[r][c]} wins!`)
+                                    }, 100);
+                                    
+                                    runing=false;
+                                }
+                    }
+                    if (r<rows-3){ //vertically
+                        if (board[r][c]===board[r+1][c] &&
+                            board[r+1][c]===board[r+2][c] &&
+                            board[r+2][c] ===board[r+3][c]){
+                                (board[r][c]===playerRed)? redscore++: yelscore++;
+                                //update the score
+                                score.textContent=`${playerRed}: ${redscore} - ${playerYel}: ${yelscore}`
+                                setTimeout(() => {
+                                    alert(`${board[r][c]} wins!`)
+                                }, 100);
+                                
+                                runing=false;
+                            }
+                    }
+                    if ((r<rows-3) && (c<columns-3)){ //antidiagonaly \
+                        if (board[r][c]===board[r+1][c+1] &&
+                            board[r+1][c+1]===board[r+2][c+2] &&
+                            board[r+2][c+2]===board[r+3][c+3]){
+                                (board[r][c]===playerRed)? redscore++: yelscore++;
+                                //update the score
+                                score.textContent=`${playerRed}: ${redscore} - ${playerYel}: ${yelscore}`
+                                setTimeout(() => {
+                                    alert(`${board[r][c]} wins!`)
+                                }, 100);
+                                
+                                runing=false;
+                            }
+                    } 
+                    if ((r>=3) && c<columns-3){ //diagonaly /
+                        if (board[r][c]===board[r-1][c+1] &&
+                            board[r-1][c+1]===board[r-2][c+2] &&
+                            board[r-2][c+2]===board[r-3][c+3]){
+                                (board[r][c]===playerRed)? redscore++: yelscore++;
+                                //update the score
+                                score.textContent=`${playerRed}: ${redscore} - ${playerYel}: ${yelscore}`
+                                setTimeout(() => {
+                                    alert(`${board[r][c]} wins!`)
+                                }, 100);
+                                
+                                runing=false;
+                            }
+                    }
+                }
+            }
+        }
+    }
