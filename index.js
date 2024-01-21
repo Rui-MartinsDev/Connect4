@@ -65,7 +65,7 @@
         displayMenu();
     }
 
-    function resetGame() {
+    function resetGame(){
         // Clear the game board
         gameDiv.innerHTML = '';
 
@@ -81,37 +81,51 @@
     }
 
     function gameStart(){ //fill the gamediv with the wholes
-        board=[];
+        board=[]; //board 2d array will be used for the checkwiner function
         currColumn=[5,5,5,5,5,5,5]
         for(let r=0; r<rows;r++){
             let row=[];
             for (let c=0; c<columns;c++){
                 row.push(' ')
                 let tile = document.createElement('div'); //creates a div for each row
-                tile.id = r.toString() + '-' + c.toString(); //sets the id
-                tile.classList.add('tiles')                 //adds the class
-                document.getElementById('board').append(tile) //apends the divs
-                tile.addEventListener('click', addPiece) // adds the functionality
+                tile.id = `${r}-${c}`; //sets the id
+                tile.classList.add('tiles');                 //adds the class (to make the circles)
+                document.getElementById('board').append(tile); //apends the divs
+                tile.addEventListener('click', addPiece); // when clicked adds the class for color
+                tile.style.transition = 'box-shadow 0.2s ease-in-out';
+                tile.addEventListener('mouseover', hoverPiece);
+                tile.addEventListener('click',hoverPiece)
+
             }
             board.push(row);
         }
     }
 
+    function hoverPiece(){
+        let tileColumn= this.id[2]
+        let tileRow= currColumn[tileColumn]
+        let botTileId = `${tileRow}-${tileColumn}`;
+        const botTile= document.getElementById(botTileId)
+        botTile.style.boxShadow = '0 0 10px 10px rgba(0, 0, 0, 0.5)';
+        this.addEventListener('mouseout', ()=>botTile.style.boxShadow = '');
+    }
+    
+    
     function addPiece(){
         if(!runing) return // the function doesnt do anything if its not runing
 
-        let coord = this.id.split('-');
+        let coord = this.id.split('-'); //returns an array [row, column]
         // let r= parseInt(coord[0]);
         let c= parseInt(coord[1]);
-        r= currColumn[c]; //the row is gona be the current number of the currColumn arr
-
+        let r= currColumn[c]; //the row is gona be the current number of the currColumn arr
         if (r<0) return;
         audio.play();
         if (board[r][c]=== ' ' ){
         board[r][c] = currPlayer;
         currColumn[c]--;
-        let tile = document.getElementById(r.toString()+ '-' + c.toString());
-        if (currPlayer == playerRed ){
+        let tile = document.getElementById(`${r}-${c}`);
+        tile.style.boxShadow=''
+        if (currPlayer == playerRed ){ //the game starts with playerRed = 'Red'
             tile.classList.add('red-piece');
             currPlayer=playerYel;
             playerTurn.style.color = 'yellow'
@@ -122,6 +136,7 @@
             
         }
         }
+        
         checkWin();
         playerTurn.textContent=`${currPlayer.charAt(0).toUpperCase()+currPlayer.slice(1)}`;
         
