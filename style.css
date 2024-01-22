@@ -1,3 +1,14 @@
+.hovered {
+    box-shadow: 0 0 10px 10px rgba(255, 255, 0, 0.6);
+}
+.Red {
+    box-shadow: 0 0 10px 10px rgba(255, 0, 0, 0.6);
+}
+.Yellow {
+    box-shadow: 0 0 10px 10px rgba(255, 255, 0, 0.6);
+}
+
+
 body{
     text-align: center;
     background-image: url(imgs/connect4BG.jpg);
@@ -52,7 +63,6 @@ h1{ /* player turn */
 #reset{ /* Play again */
     height: 40px;
     width: 100px;
-    
     padding: 5px;
     border-radius: 10px;
     cursor: pointer;
@@ -60,7 +70,16 @@ h1{ /* player turn */
     top: 50%;
     right: 100px;
 }
-
+#redo{
+    height: 40px;
+    width: 100px;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    position: absolute;
+    top: 33%;
+    right: 100px;
+}
 /* OPTIONS MENU */
 #optionsButton{
     position: absolute;
@@ -69,7 +88,7 @@ h1{ /* player turn */
     width: 100px;
     height: 40px;
     border-radius: 10px;
-} #optionsButton:hover ,#reset:hover{ /* hovers */
+} #optionsButton:hover ,#reset:hover, #redo:hover{ /* hovers */
     cursor: pointer;
     box-shadow:  0px 0px 5px 10px rgba(0,0,0,0.5);}
 #optionsMenu {

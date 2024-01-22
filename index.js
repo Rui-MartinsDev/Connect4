@@ -2,7 +2,9 @@
    
     let playerRed = 'Red', redscore=0;
     let playerYel ='Yellow', yelscore=0;
-
+    let lastTilePlayed;
+    let removeHover;
+    let tilesPlayed=[];
     let currPlayer= playerRed;
     const rows=6;
     const columns=7;
@@ -94,7 +96,7 @@
                 tile.addEventListener('click', addPiece); // when clicked adds the class for color
                 tile.style.transition = 'box-shadow 0.2s ease-in-out';
                 tile.addEventListener('mouseover', hoverPiece);
-                tile.addEventListener('click',hoverPiece)
+                // tile.addEventListener('click', lastPiece)
 
             }
             board.push(row);
@@ -102,26 +104,50 @@
     }
 
     function hoverPiece(){
-        let tileColumn= this.id[2]
+        
+        let tileColumn= this.id[2] //id is 'r-c'
         let tileRow= currColumn[tileColumn]
         let botTileId = `${tileRow}-${tileColumn}`;
         const botTile= document.getElementById(botTileId)
-        botTile.style.boxShadow = '0 0 10px 10px rgba(0, 0, 0, 0.5)';
-        this.addEventListener('mouseout', ()=>botTile.style.boxShadow = '');
+        try{document.getElementById(removeHover).classList.remove(currPlayer)
+        } catch (e){
+            console.log('Didnt select any yet')
+        }
+        if (tileRow>=0) {         
+        botTile.classList.add(currPlayer)
+        this.addEventListener('mouseout',()=>botTile.classList.remove(currPlayer))
+    }
     }
     
     
     function addPiece(){
         if(!runing) return // the function doesnt do anything if its not runing
+        
 
         let coord = this.id.split('-'); //returns an array [row, column]
         // let r= parseInt(coord[0]);
         let c= parseInt(coord[1]);
         let r= currColumn[c]; //the row is gona be the current number of the currColumn arr
+        
         if (r<0) return;
         audio.play();
+        for (let i = 0; i < rows; i++) {
+            let colTile = document.getElementById(`${i}-${c}`);
+            colTile.classList.remove(currPlayer);
+        }
+        
+        removeHover=`${r-1}-${c}`;
+        lastTilePlayed=`${r}-${c}`;
+        tilesPlayed.push(lastTilePlayed)
+        console.log(tilesPlayed[tilesPlayed.length-2])
+        if (tilesPlayed.length>1){
+            document.getElementById(tilesPlayed[tilesPlayed.length-2]).style.boxShadow ='';
+        }
+
+
+
         if (board[r][c]=== ' ' ){
-        board[r][c] = currPlayer;
+        board[r][c] = currPlayer;   
         currColumn[c]--;
         let tile = document.getElementById(`${r}-${c}`);
         tile.style.boxShadow=''
@@ -136,87 +162,15 @@
             
         }
         }
-        
+        if(r!==0) document.getElementById(removeHover).classList.add(currPlayer) //adds the hover on the upper piece when clicked
+
+        document.getElementById(lastTilePlayed).style.boxShadow ='0 0 10px 10px rgba(0, 0, 0, 0.5)'; //add a effect to the last piece played
+
         checkWin();
-        playerTurn.textContent=`${currPlayer.charAt(0).toUpperCase()+currPlayer.slice(1)}`;
-        
-        
+        playerTurn.textContent=`${currPlayer.charAt(0).toUpperCase()+currPlayer.slice(1)}`;        
     }
 
-    function checkWiner(){ //CHANGED THE FUNCTIONALY TO THE checkWin() one, (less code easier to read,faster)
-        for (let c=0;c<columns-3;c++){ //check horizontally
-            for (let r=0; r<rows;r++){
-                if (board[r][c] !== ' '){
-                    if (board[r][c] ===board[r][c+1] && 
-                        board[r][c+1]===board[r][c+2] &&
-                        board[r][c+2] ===board[r][c+3]){
-                            (board[r][c]===playerRed)? redscore++: yelscore++;
-                            //update the score
-                            score.textContent=`${playerRed}: ${redscore} - ${playerYel}: ${yelscore}`
-                            setTimeout(() => {
-                                alert(`${board[r][c]} wins!`)
-                            }, 100);
-                            
-                            runing=false;
-                        }
-                }
-            }
-        }
-        for (let r=0; r<rows-3; r++){ // vertically
-            for (let c=0; c<columns;c++){
-                if (board[r][c]!==' '){
-                    if (board[r][c]===board[r+1][c] &&
-                        board[r+1][c]===board[r+2][c] &&
-                        board[r+2][c] ===board[r+3][c]){
-                            (board[r][c]===playerRed)? redscore++: yelscore++;
-                            //update the score
-                            score.textContent=`${playerRed}: ${redscore} - ${playerYel}: ${yelscore}`
-                            setTimeout(() => {
-                                alert(`${board[r][c]} wins!`)
-                            }, 100);
-                            
-                            runing=false;
-                        }
-                }
-            }
-        }
-        for (let r=0; r<rows-3;r++){ // anti-diagonal \
-            for (let c=0;c<columns-3;c++){
-                if (board[r][c]!==' '){
-                    if (board[r][c]===board[r+1][c+1] &&
-                        board[r+1][c+1]===board[r+2][c+2] &&
-                        board[r+2][c+2]===board[r+3][c+3]){
-                            (board[r][c]===playerRed)? redscore++: yelscore++;
-                            //update the score
-                            score.textContent=`${playerRed}: ${redscore} - ${playerYel}: ${yelscore}`
-                            setTimeout(() => {
-                                alert(`${board[r][c]} wins!`)
-                            }, 100);
-                            
-                            runing=false;
-                        }
-                }
-            }
-        }
-        for (let r=3; r<rows;r++){ //diagonal /
-            for (let c=0;c<columns-3;c++){
-                if (board[r][c]!==' '){
-                    if (board[r][c]===board[r-1][c+1] &&
-                        board[r-1][c+1]===board[r-2][c+2] &&
-                        board[r-2][c+2]===board[r-3][c+3]){
-                            (board[r][c]===playerRed)? redscore++: yelscore++;
-                            //update the score
-                            score.textContent=`${playerRed}: ${redscore} - ${playerYel}: ${yelscore}`
-                            setTimeout(() => {
-                                alert(`${board[r][c]} wins!`)
-                            }, 100);
-                            
-                            runing=false;
-                        }
-                }
-            }
-        }
-    }
+    
     function checkWin(){
         for (let r=0;r<rows;r++){
             for (let c=0;c<columns;c++){
