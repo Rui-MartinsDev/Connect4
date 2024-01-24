@@ -26,12 +26,14 @@
     const optionsMenu = document.getElementById('optionsMenu'); //Options menu
     const cross =document.getElementById('cross');  //cross mark
     const input=document.querySelectorAll('.inputField') //inputfields for the names
+    const redoBtn = document.getElementById('redo');
 
     //EVENT LISTENERS
     optionsButton.addEventListener('click', displayMenu); //open and close
     buttonNames.addEventListener('click',setNames)
     resetBtn.addEventListener('click', resetGame) //resetgame
-    cross.addEventListener('click',displayMenu);    
+    cross.addEventListener('click',displayMenu);    //close the names menu
+    redoBtn.addEventListener('click',redoPlay)
     input.forEach((element)=>{element.addEventListener('keydown', (e)=>{ //pressing enter will also setnames
         if (e.key==='Enter') setNames();
     })});
@@ -40,6 +42,34 @@
     })
 
     /* Functions */
+    function redoPlay(){
+        if (lastTilePlayed===undefined){
+            console.log('No plays played!')
+        } else{
+            let r= lastTilePlayed[0];
+            let c=lastTilePlayed[2];
+            let tile = document.getElementById(lastTilePlayed)
+            if (board[r][c]===`${playerRed}`) {
+                tile.classList.remove('red-piece')
+                currPlayer= playerRed
+                playerTurn.style.color = 'red'
+
+            } else if (board[r][c]===`${playerYel}`){
+                tile.classList.remove('yellow-piece')
+                currPlayer=playerYel
+                playerTurn.style.color = 'yellow'
+
+            }
+            playerTurn.textContent=`${currPlayer.charAt(0).toUpperCase()+currPlayer.slice(1)}`;   
+            tile.style.boxShadow='none';
+            if ((currColumn[c]+1) ==r) currColumn[c]++;
+            board[r][c]=' ';
+            tile.addEventListener('mouseover', hoverPiece);
+            
+
+        }
+
+    }
     function displayMenu(){ //open or close menu
         optionsMenu.style.display = optionsMenu.style.display === 'block' ? 'none' : 'block';
     }
@@ -81,7 +111,7 @@
         // Restart the game
         gameStart();
     }
-
+    
     function gameStart(){ //fill the gamediv with the wholes
         board=[]; //board 2d array will be used for the checkwiner function
         currColumn=[5,5,5,5,5,5,5]
@@ -114,8 +144,8 @@
             console.log('Didnt select any yet')
         }
         if (tileRow>=0) {         
-        botTile.classList.add(currPlayer)
-        this.addEventListener('mouseout',()=>botTile.classList.remove(currPlayer))
+            botTile.classList.add(currPlayer)
+            this.addEventListener('mouseout',()=>botTile.classList.remove(currPlayer))
     }
     }
     
@@ -125,7 +155,7 @@
         
 
         let coord = this.id.split('-'); //returns an array [row, column]
-        // let r= parseInt(coord[0]);
+        // let r= parseInt(coord[0]); //no need to set the row because the position will be on the bottom
         let c= parseInt(coord[1]);
         let r= currColumn[c]; //the row is gona be the current number of the currColumn arr
         
@@ -136,10 +166,8 @@
             colTile.classList.remove(currPlayer);
         }
         
-        removeHover=`${r-1}-${c}`;
-        lastTilePlayed=`${r}-${c}`;
+        lastTilePlayed=`${r}-${c}`; //to shade the last tile played
         tilesPlayed.push(lastTilePlayed)
-        console.log(tilesPlayed[tilesPlayed.length-2])
         if (tilesPlayed.length>1){
             document.getElementById(tilesPlayed[tilesPlayed.length-2]).style.boxShadow ='';
         }
@@ -162,12 +190,13 @@
             
         }
         }
+        removeHover=`${r-1}-${c}`; // hits the tile above the one last played
         if(r!==0) document.getElementById(removeHover).classList.add(currPlayer) //adds the hover on the upper piece when clicked
 
         document.getElementById(lastTilePlayed).style.boxShadow ='0 0 10px 10px rgba(0, 0, 0, 0.5)'; //add a effect to the last piece played
 
         checkWin();
-        playerTurn.textContent=`${currPlayer.charAt(0).toUpperCase()+currPlayer.slice(1)}`;        
+        playerTurn.textContent=`${currPlayer.charAt(0).toUpperCase()+currPlayer.slice(1)}`;   
     }
 
     
@@ -234,5 +263,12 @@
                     }
                 }
             }
+        }
+        if (!(board.flat().includes(' '))) {
+            setTimeout(() => {
+                alert(`Draw!`)
+            }, 100);
+            
+            runing=false;
         }
     }
